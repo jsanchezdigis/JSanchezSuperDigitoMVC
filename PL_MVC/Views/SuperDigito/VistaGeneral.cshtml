@@ -1,0 +1,83 @@
+﻿@model ML.Historial
+@{
+    ViewData["Title"] = "VistaGeneral";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>VistaGeneral</h1>
+
+@using (Html.BeginForm("VistaGeneral", "SuperDigito", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <h3>Calcular Super Digito</h3>
+
+    <div class="form-group">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.IdHistorial, new { @class = "visually-hidden" })
+
+            @Html.TextBoxFor(model => model.IdHistorial, new { @class = "visually-hidden form-control" })
+            @Html.ValidationMessageFor(model => model.IdHistorial)
+            @*hidden*@
+        </div>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Digito)
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1"><i class="fa-solid fa-user-large" style="color:darkcyan "></i></span>
+                    @Html.TextBoxFor(model => model.Digito, new { @class = "form-control", @id = "txtDigito" })
+
+                    @Html.ValidationMessageFor(model => model.Digito,"", new { @class = "text-danger"})
+                </div>
+                @Html.Label(null, "", new {@id ="lblDigito"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
+                <button class="btn btn-outline-secondary" type="submit">Calcular</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+        <div class="row">
+            @if (Model.Historials != null)
+            {
+                //tabla
+                <table class="table table-bordered table-responsive table-hover" id="tblHistorial">
+                    <thead>
+                        <tr>
+                            <td class="text-center" style=" font-weight:bold;">Dígito</td>
+                            <td class="text-center" style=" font-weight:bold;">Super Dígito</td>
+                            <td class="text-center" style=" font-weight:bold;">Fecha y Hora</td>
+
+                            <td class="text-center" style=" font-weight:bold;">Borrar Historial</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (ML.Historial historial in Model.Historials)
+                        {
+                            <tr>
+                                <td>@historial.Digito</td>
+                                <td>@historial.SuperDigito</td>
+                                <td>@historial.Fecha</td>
+
+                                <td class="text-center"><a class="bi bi-trash-fill" href="@Url.Action("Delete", "SuperDigito", new { IdHistorial = historial.IdHistorial })" onclick="return confirm('Estas seguro que deseas eliminar el historial?');"></a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">Ocurrio un error al realizar la consulta </div>
+            }
+        </div>
+    </div>
+}
